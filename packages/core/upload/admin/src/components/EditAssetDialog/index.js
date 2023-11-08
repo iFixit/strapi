@@ -47,6 +47,7 @@ const LoadingBody = styled(Flex)`
 const fileInfoSchema = yup.object({
   name: yup.string().required(),
   alternativeText: yup.string(),
+  focalPoint: yup.object({ x: yup.number(), y: yup.number() }).nullable().default(null),
   caption: yup.string(),
   folder: yup.number(),
 });
@@ -63,6 +64,7 @@ export const EditAssetDialog = ({
   const { trackUsage } = useTracking();
   const submitButtonRef = useRef(null);
   const [isCropping, setIsCropping] = useState(false);
+  const [hasFocalPointIntent, setHasFocalPointIntent] = useState(false);
   const [replacementFile, setReplacementFile] = useState();
   const { editAsset, isLoading } = useEditAsset();
 
@@ -108,7 +110,15 @@ export const EditAssetDialog = ({
     onClose();
   };
 
-  const formDisabled = !canUpdate || isCropping;
+  const handleFocalPointStart = () => {
+    setHasFocalPointIntent(true);
+  };
+
+  const handleFocalPointCancel = () => {
+    setHasFocalPointIntent(false);
+  };
+
+  const formDisabled = !canUpdate || isCropping || hasFocalPointIntent;
 
   const handleConfirmClose = () => {
     // eslint-disable-next-line no-alert
@@ -128,6 +138,7 @@ export const EditAssetDialog = ({
   const initialFormData = !folderStructureIsLoading && {
     name: asset.name,
     alternativeText: asset.alternativeText ?? undefined,
+    focalPoint: asset.focalPoint,
     caption: asset.caption ?? undefined,
     parent: {
       value: activeFolderId ?? undefined,
@@ -192,6 +203,13 @@ export const EditAssetDialog = ({
                   onCropCancel={handleCancelCropping}
                   replacementFile={replacementFile}
                   trackedLocation={trackedLocation}
+                  formFocalPoint={values.focalPoint}
+                  onSetFocalPointStart={handleFocalPointStart}
+                  onSetFocalPointFinish={(field, value) => {
+                    setHasFocalPointIntent(false);
+                    setFieldValue(field, value);
+                  }}
+                  onSetFocalPointCancel={handleFocalPointCancel}
                 />
               </GridItem>
               <GridItem xs={12} col={6}>
@@ -239,6 +257,18 @@ export const EditAssetDialog = ({
                           }),
                           value: asset.id,
                         },
+
+                        ...(values.focalPoint
+                          ? [
+                              {
+                                label: formatMessage({
+                                  id: getTrad('modal.file-details.focal-point'),
+                                  defaultMessage: 'Focal point',
+                                }),
+                                value: `x: ${values.focalPoint.x}% - y: ${values.focalPoint.y}%`,
+                              },
+                            ]
+                          : []),
                       ]}
                     />
 

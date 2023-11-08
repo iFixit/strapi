@@ -18,7 +18,7 @@ export const AssetPreview = forwardRef(({ mime, url, name, ...props }, ref) => {
   const [lang] = usePersistentState('strapi-admin-language', 'en');
 
   if (mime.includes(AssetType.Image)) {
-    return <img ref={ref} src={url} alt={name} {...props} />;
+    return <img ref={ref} src={url} alt={name} style={{ width: '100%' }} {...props} />;
   }
 
   if (mime.includes(AssetType.Video)) {
@@ -40,14 +40,14 @@ export const AssetPreview = forwardRef(({ mime, url, name, ...props }, ref) => {
   if (mime.includes('pdf')) {
     return (
       <CardAsset justifyContent="center" {...props}>
-        <FilePdf aria-label={name} />
+        <FilePdf aria-label={name} style={{ width: '100%' }} />
       </CardAsset>
     );
   }
 
   return (
     <CardAsset justifyContent="center" {...props}>
-      <File aria-label={name} />
+      <File aria-label={name} style={{ width: '100%' }} />
     </CardAsset>
   );
 });

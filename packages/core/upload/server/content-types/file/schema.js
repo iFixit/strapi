@@ -33,6 +33,10 @@ module.exports = {
       type: 'string',
       configurable: false,
     },
+    focalPoint: {
+      type: 'json',
+      configurable: false,
+    },
     width: {
       type: 'integer',
       configurable: false,

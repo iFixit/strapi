@@ -85,6 +85,7 @@ module.exports = ({ strapi }) => {
         t.string('name');
         t.string('alternativeText');
         t.string('caption');
+        t.json('focalPoint');
       },
     });
 

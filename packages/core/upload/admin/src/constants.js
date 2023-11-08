@@ -66,6 +66,7 @@ export const AssetDefinition = PropTypes.shape({
   size: PropTypes.number,
   createdAt: PropTypes.string,
   ext: PropTypes.string,
+  focalPoint: PropTypes.shape({ x: PropTypes.number, y: PropTypes.number }),
   mime: PropTypes.string,
   name: PropTypes.string,
   url: PropTypes.string,

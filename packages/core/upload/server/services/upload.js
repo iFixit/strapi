@@ -83,6 +83,7 @@ module.exports = ({ strapi }) => ({
       name: usedName,
       alternativeText: fileInfo.alternativeText,
       caption: fileInfo.caption,
+      focalPoint: fileInfo.focalPoint,
       folder: fileInfo.folder,
       folderPath: await fileService.getFolderPath(fileInfo.folder),
       hash: generateFileName(basename),
@@ -260,7 +261,7 @@ module.exports = ({ strapi }) => ({
     return this.add(fileData, { user });
   },
 
-  async updateFileInfo(id, { name, alternativeText, caption, folder }, { user } = {}) {
+  async updateFileInfo(id, { name, alternativeText, focalPoint, caption, folder }, { user } = {}) {
     const dbFile = await this.findOne(id);
 
     if (!dbFile) {
@@ -273,6 +274,7 @@ module.exports = ({ strapi }) => ({
     const newInfos = {
       name: newName,
       alternativeText: _.isNil(alternativeText) ? dbFile.alternativeText : alternativeText,
+      focalPoint: _.isNil(focalPoint) ? dbFile.focalPoint : focalPoint,
       caption: _.isNil(caption) ? dbFile.caption : caption,
       folder: _.isUndefined(folder) ? dbFile.folder : folder,
       folderPath: _.isUndefined(folder) ? dbFile.path : await fileService.getFolderPath(folder),
